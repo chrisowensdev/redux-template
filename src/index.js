@@ -12,6 +12,7 @@ import BaseLayout from './components/layout/BaseLayout';
 // redux
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
+import reducer from './reducers/reducerTemplate';
 
 // initializing redux store
 // requires a reducer.  Second argument is for redux dev-tools extension.
