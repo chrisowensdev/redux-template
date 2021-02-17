@@ -14,12 +14,40 @@ import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import reducer from './reducers/reducerTemplate';
 
+const saveToLocalStorage = (reduxGlobaState) => {
+    //serialization = converting js object to a string
+
+    try {
+        const serializeState = JSON.stringify(reduxGlobaState);
+        localStorage.setItem('state', serializeState);
+    } catch (e) {
+        console.log(e);
+    }
+};
+
+const loadFromLocalStorage = () => {
+    const serializeState = localStorage.getItem('state');
+
+    if (serializeState === null) {
+        return undefined;
+    } else {
+        return JSON.parse(serializeState); //returns JS object
+    }
+};
+
+const persistedState = loadFromLocalStorage();
+
 // initializing redux store
 // requires a reducer.  Second argument is for redux dev-tools extension.
 let store = createStore(
     reducer,
+    persistedState,
     window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 );
+
+store.subscribe(() => {
+    saveToLocalStorage(store.getState());
+});
 
 //provider connects react to redux.  Must pass redux instance to provider via "store" prop.
 ReactDOM.render(
